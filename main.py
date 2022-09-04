@@ -1,26 +1,9 @@
-import pyttsx3
 import speech_recognition as sr
 import re
-import datetime
 import os
 import pyaudio
-import wave
 import random
-from requests import get
-import webbrowser
-import pywhatkit as kit
-import smtplib
-import sys
 import time
-import pyjokes
-import PyPDF2
-import pyautogui
-import requests
-import json
-from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtCore import QTimer, QTime, QDate, Qt
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 import jarvisfront
 
 
