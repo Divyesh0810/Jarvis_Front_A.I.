@@ -1,9 +1,5 @@
 import speech_recognition as sr
 import re
-import os
-import pyaudio
-import random
-import time
 import jarvisfront
 
 
@@ -34,7 +30,6 @@ def dec_func(text):
     jokematch = re.search(r"joke", text)
     if timedatematch:
         jarvisfront.TimeAndDate.dec_func(timedatematch.group(0))
-        print(timedatematch.group(0))
     elif applicationmatch:
         app = jarvisfront.Applications(applicationmatch.group(1))
         app.open_app()
@@ -52,11 +47,17 @@ def dec_func(text):
         print("-The given command is not valid")
 
 
-jarvisfront.speak("Welcome to JarvisFront AI.")
 print("-Welcome to JarvisFront AI")
-user_command = "open instagram"
-while user_command != 0:
-    if user_command != -1:
-        dec_func(user_command)
-    user_command = take_command()
-    print("You:", user_command)
+jarvisfront.speak("Welcome to JarvisFront AI.")
+print("Commands available: ")
+print("  1)Get current date or time ~ (command ~ a string including the keyword 'time')")
+print("  2)Open a system or 3rd party application ~ {'open' application_name")
+print("  3)Open a website (command ~ {'search' search_info 'in' site_name})")
+print("  4)Get a joke (command ~ a string including the keyword 'joke')")
+print("Jarvisfront: These are the commands available currently")
+jarvisfront.speak("These are the commands available")
+print("Jarvisfront: Speak out your command!")
+jarvisfront.speak("Speak out your command!")
+user_command = take_command()
+print("You:", user_command)
+dec_func(user_command)
