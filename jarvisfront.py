@@ -1,6 +1,8 @@
 import pyttsx3
 import pyjokes
+import webbrowser
 import re
+import subprocess
 import os
 import datetime
 from selenium import webdriver
@@ -21,15 +23,15 @@ web_login_details = {
 }
 web_search_details = {
     "google" : ["https://www.google.com", '//input[@class="search-field"]'],
-    "yahoo" : ["https://in.search.yahoo.com/", '//input[@class="sbq"'],
+    "yahoo" : ["https://in.search.yahoo.com/", '//input[@class="sbq"]'],
     "wikipedia" : ["https://wikipedia.org", '//input[@id="searchInput"]'],
     "youtube" : ["https://youtube.com", '//input[@class="ytd-searchbox"]'],
-    "weather" : ["https://weather.com", '//input[@id="LocationSearch_input"'],
-    "twitter" :["https://twitter.com/explore", '//input[@class"r-30o5oe r-1niwhzg r-17gur6a r-1yadl64 r-deolkf r-homxoj r-poiln3 r-7cikom r-1ny4l3l r-xyw6el r-13rk5gd r-1dz5y72 r-fdjqy7 r-13qz1uu"'],
-    "github" : ["https://github.com", '//input[@class="form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"'],
-    "linkedIn" : ["https://in.linkedin.com/jobs", '//input[@class="dismissable-input__input font-sans text-md text-color-text bg-color-transparent flex items-center flex-1 focus:outline-none"'],
+    "weather" : ["https://weather.com", '//input[@id="LocationSearch_input"]'],
+    "twitter" :["https://twitter.com/explore", '//input[@class"r-30o5oe r-1niwhzg r-17gur6a r-1yadl64 r-deolkf r-homxoj r-poiln3 r-7cikom r-1ny4l3l r-xyw6el r-13rk5gd r-1dz5y72 r-fdjqy7 r-13qz1uu"]'],
+    "github" : ["https://github.com", '//input[@class="form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"]'],
+    "linkedIn" : ["https://in.linkedin.com/jobs", '//input[@class="dismissable-input__input font-sans text-md text-color-text bg-color-transparent flex items-center flex-1 focus:outline-none"]'],
     "msn" : ["https://www.msn.com", '//input[@type="search"'],
-    "imdb" : ["https://imdb.com", '//input[@class="imdb-header-search__input searchTypeahead__input react-autosuggest__input"']
+    "imdb" : ["https://imdb.com", '//input[@class="imdb-header-search__input searchTypeahead__input react-autosuggest__input"]']
 }
 
 
@@ -42,19 +44,20 @@ class Website:
         if self.search_info == False:
             if self.sitename not in web_login_details.keys():
                 browser = webdriver.Chrome("C:\Program Files\chromedriver.exe")
+                speak(f"Searching web for '{self.sitename}'")
                 browser.get(f"https://www.google.com/search?q={self.sitename}")
                 print(f"Jarvisfront: Searching web for '{self.sitename}'")
-                speak(f"Searching web for '{self.sitename}'")
             else:
                 self.login_and_use()
         else:
-            browser = webdriver.Chrome("C:\Program Files\chromedriver.exe")
+            browser = webdriver.Chrome(ChromeDriverManager().install())
+            #browser = webdriver.Chrome("C:\Program Files\chromedriver.exe")
             print(f"Jarvisfront: Opening {self.sitename} in web")
             speak(f"Opening {self.sitename} in web")
             browser.get(web_search_details[self.sitename][0])
             browser.implicitly_wait(5)
-            print(f"Jarvisfront: Searhing for {self.search_info} on {self.sitename}")
             speak(f"Searhing for {self.search_info} on {self.sitename}")
+            print(f"Jarvisfront: Searching for {self.search_info} on {self.sitename}")
             search_bar = browser.find_element(By.XPATH, web_search_details[self.sitename][1])
             search_bar.click()
             search_bar.send_keys(self.search_info)
@@ -67,13 +70,15 @@ class Website:
         speak(f"Enter your {self.sitename} password")
         password_str = input(f"Enter your {self.sitename} password: ")
         browser = webdriver.Chrome(ChromeDriverManager().install())
-        browser.get(self.sitename)
+        #browser = webdriver.Chrome("C:\Program Files\chromedriver.exe")
+        browser.get('https://www.'+self.sitename+'.com/login')
         browser.implicitly_wait(5)
         username = browser.find_element(By.XPATH, web_login_details[self.sitename][0])
         username.send_keys(username_str)
-        password = browser.find_element(By.XPATH, web_login_details[self.stiename][1])
+        password = browser.find_element(By.XPATH, web_login_details[self.sitename][1])
         password.send_keys(password_str)
         password.send_keys(Keys.ENTER)
+        time.sleep(43200)
 
 
 sys_apps = {
@@ -119,12 +124,12 @@ class TimeAndDate:
 
     @classmethod
     def time_now(cls):
-        speak(cls.data.strftime("%I %M %p"))
+        speak(cls.data.strftime("The time now is %I %M %p."))
         print("Time: "+ cls.data.strftime("%I:%M %p"))
 
     @classmethod
     def date_tdy(cls):
-        speak(cls.data.strftime("%B %d, %Y"))
+        speak(cls.data.strftime("Today is %B %d, %Y"))
         print("Date: " + cls.data.strftime("%B %d, %Y"))
 
     @classmethod    
@@ -141,7 +146,7 @@ class TimeAndDate:
 
 def say_a_joke():
     joke = pyjokes.get_joke(language="en", category="neutral")
-    print(joke)
+    print("Jarvisfront: "+joke)
     speak(joke)
 
 
