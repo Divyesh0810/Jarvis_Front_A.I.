@@ -1,8 +1,6 @@
 import pyttsx3
 import pyjokes
-import webbrowser
 import re
-import subprocess
 import os
 import datetime
 from selenium import webdriver
